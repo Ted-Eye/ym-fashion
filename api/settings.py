@@ -24,7 +24,7 @@ cloudinary.config(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['.onrender.com', 'ym-fashion.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
