@@ -25,6 +25,7 @@ class Coupon(models.Model):
     issued_on = models.DateTimeField(auto_now_add=True)
     expires_on = models.DateTimeField(blank=True, null=True)
 
+
 #  OVERRIDE THE SAVE METHOD AND USE TIMEDELTA TO AUTOMATICALLY SET EXPIRY DATE, COUNTING FROM THE ISSUED DATE
     def save(self, *args, **kwargs):
         if not self.expires_on:
