@@ -22,4 +22,4 @@ class HairstyleViewset(viewsets.ModelViewSet):
 class ProductViewset(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
