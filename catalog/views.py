@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from rest_framework import permissions, viewsets
+from rest_framework import viewsets
+from rest_framework.permissions import AllowAny, IsAdminUser
 from .models import Hairstyle, Product
 from .serializers import HairstyleSerializer, ProductSerializer
 from django.views.decorators.csrf import csrf_exempt
@@ -10,7 +11,12 @@ from django.utils.decorators import method_decorator
 class HairstyleViewset(viewsets.ModelViewSet):
     queryset = Hairstyle.objects.all()
     serializer_class = HairstyleSerializer
-    permission_classes = [permissions.AllowAny]
+    
+    def get_permissions(self):
+        if self.action in ['list', 'retreive']:
+            return [AllowAny()]
+        return [IsAdminUser()]
+    
 
 
 class ProductViewset(viewsets.ModelViewSet):

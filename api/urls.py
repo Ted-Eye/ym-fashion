@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 from rest_framework import routers
 from catalog import views
 from clients import views as clientViews
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 #CATALOG URLS
 router = routers.DefaultRouter()
@@ -20,6 +21,8 @@ router.register("reviews", clientViews.ReviewViewset, basename='reviews' )
 
 
 urlpatterns = [
+    path('token/', TokenObtainPairView.as_view()),
+    path('token/refresh/', TokenRefreshView.as_view),
     path('admin/', admin.site.urls),
     path('catalog/', include(router.urls)),
     path('clients/', include(router.urls)),

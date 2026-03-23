@@ -6,6 +6,8 @@ import os
 from urllib.parse import urlparse, parse_qsl
 import cloudinary
 import dj_database_url
+from datetime import timedelta
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -59,6 +61,24 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'api.urls'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': (
+        timedelta(minutes=30),
+    ),
+    'REFRESH_TOKEN_LIFETIME': (
+        timedelta(days=1),
+    ),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
 
 TEMPLATES = [
     {
