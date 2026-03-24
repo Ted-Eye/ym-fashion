@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'clients',
     'payment',
     'team',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
