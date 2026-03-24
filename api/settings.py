@@ -23,6 +23,10 @@ cloudinary.config(
     secure=False
 )
 
+CAMPAY_USERNAME = os.getenv('CAMPAY_USERNAME')
+CAMPAY_PASSWORD = os.getenv('CAMPAY_PASSWORD')
+CAMPAY_MODE = os.getenv('CAMPAY_MODE')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
@@ -46,6 +50,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'catalog',
     'clients',
+    'payment',
     'team',
 ]
 

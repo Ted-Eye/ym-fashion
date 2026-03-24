@@ -2,20 +2,19 @@ from django.db import models
 from django.utils import timezone
 from datetime import timedelta
 from catalog.models import Hairstyle
+from payment.models import Payment
 
 # Create your models here.
 
-class Order(models.Model):
+class Booking(models.Model):
     style = models.ForeignKey(Hairstyle, on_delete=models.CASCADE)
-    client = models.CharField(max_length=100)
-    tel = models.IntegerField()
-    address = models.CharField(max_length=100, blank=True)
+    client = models.ForeignKey(Payment, on_delete=models.DO_NOTHING)
     schedule_date = models.DateTimeField(blank=False)
-    created_on = models.DateTimeField(auto_now_add=True)
-
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.client
+        return self.client.status
     
 
 class Coupon(models.Model):

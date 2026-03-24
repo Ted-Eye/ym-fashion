@@ -1,13 +1,13 @@
 from rest_framework import viewsets, permissions
-from .models import Order, Coupon, Review
-from .serializers import OrderSerializer, CouponSerializer, ReviewSerializer
+from .models import Booking, Coupon, Review
+from .serializers import BookingSerializer, CouponSerializer, ReviewSerializer
 
 # Create your views here.
 
 
-class OrderViewset(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+class BookingViewset(viewsets.ModelViewSet):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
     permission_classes = [permissions.AllowAny]
 
 class CouponViewset(viewsets.ModelViewSet):

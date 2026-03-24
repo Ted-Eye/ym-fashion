@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import Order, Coupon, Review
+from .models import Booking, Coupon, Review
 
-class OrderSerializer(serializers.ModelSerializer):
+class BookingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Order
+        model = Booking
         fields = '__all__'
 
 class CouponSerializer(serializers.ModelSerializer):
