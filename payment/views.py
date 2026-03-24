@@ -1,10 +1,12 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .services import CampayService
 from .models import Payment
+from rest_framework.permissions import AllowAny
 
 
 @api_view(["POST"])
+@permission_classes([AllowAny])
 def initiate_payment(request):
     phone = request.data.get("phone")
     amount = request.data.get("amount")
