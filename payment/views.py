@@ -14,7 +14,16 @@ def initiate_payment(request):
     response = service.initiatePayment(
         amount=amount, phone=phone, description='Barbing appointment'
     )
-    reference = response.get("reference")
+    # FOR DEBUG PURPOSES
+    print("response from CAMPAY: ", response)
+
+    reference = response.get("reference") if isinstance(response, dict) else None
+
+    if not response:
+        return Response({
+            "error": "payment initiation failed",
+            "details": str(response)
+        }, status=400)
 
     payment = Payment.objects.create(
         reference=reference, phone=phone, amount=amount, status="PENDING"
