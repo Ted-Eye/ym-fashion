@@ -9,9 +9,12 @@ class CampayService:
         )
     def initiatePayment(self, amount, phone, description):
         try:
-            return self.client.collect({
+            res = self.client.collect({
             "amount": str(amount), "currency": "XAF", "from": phone, "description": description
         })
+            if hasattr(res, "__dict__"):
+                return res.__dict__
+        
         except Exception as e:
             return {"status": "error", "message": str(e)}
     def getStatus(self, reference):

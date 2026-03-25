@@ -28,19 +28,26 @@ def initiate_payment(request):
             description='Barbing appointment'
         )
     except Exception as e:
+        print("RAW CAMPAY RESPONSE:", response, type(response))
         return Response(
             {"error": "Payment service error", "details": str(e)},
             status=500
         )
 
-    if not response or "reference" not in response:
+    if not isinstance(response, dict):
+        print("RAW CAMPAY RESPONSE:", response, type(response))
         return Response(
-            {"error": "Payment initiation failed", "details": response},
+            {"error": "Invalid response from payment service", "details": str(response)},
             status=400
         )
-
+    if "reference" not in response:
+        print("RAW CAMPAY RESPONSE:", response, type(response))
+        return Response(
+            {"error": "Payment initiation failed", "details": response}, status=400
+        )
     reference = response.get("reference")
-    status = response.get("status", "PENDING")
+    status = "PENDING"
+    # status = response.get("status", "PENDING")
 
     payment = Payment.objects.create(
         reference=reference,
