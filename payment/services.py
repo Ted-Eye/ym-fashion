@@ -8,8 +8,14 @@ class CampayService:
             username=settings.CAMPAY_USERNAME, password=settings.CAMPAY_PASSWORD, mode=settings.CAMPAY_MODE
         )
     def initiatePayment(self, amount, phone, description):
-        return self.client.collect({
+        try:
+            return self.client.collect({
             "amount": str(amount), "currency": "XAF", "from": phone, "description": description
         })
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
     def getStatus(self, reference):
-        return self.client.get_transaction_status(reference)
+        try:
+            return self.client.get_transaction_status(reference)
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
