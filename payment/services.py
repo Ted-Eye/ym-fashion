@@ -5,9 +5,9 @@ from django.conf import settings
 class CampayService:
     def __init__(self):
         self.client = campayClient(
-            username=settings.CAMPAY_USERNAME,
-            password=settings.CAMPAY_PASSWORD,
-            mode=settings.CAMPAY_MODE
+            app_username=settings.CAMPAY_USERNAME,
+            app_password=settings.CAMPAY_PASSWORD,
+            environment=settings.CAMPAY_MODE
         )
 
     def initiate_payment(self, amount, phone, description):
