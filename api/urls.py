@@ -21,8 +21,8 @@ router.register("reviews", clientViews.ReviewViewset, basename='reviews' )
 
 
 urlpatterns = [
-    path('token/', TokenObtainPairView.as_view),
-    path('token/refresh/', TokenRefreshView.as_view),
+    path('token/', TokenObtainPairView.as_view(), name='access-token'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='refresh-token'),
     path('admin/', admin.site.urls),
     path('catalog/', include(router.urls)),
     path('clients/', include(router.urls)),
