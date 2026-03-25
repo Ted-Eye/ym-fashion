@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from .services import CampayService
 from .models import Payment
 from rest_framework.permissions import AllowAny
-
+from rest_framework import status
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -12,53 +12,47 @@ def initiate_payment(request):
     amount = request.data.get("amount")
 
     if not phone or not amount:
-        return Response({"error": "phone and amount are required"}, status=400)
+        return Response({"error": "phone and amount are required"}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         amount = float(amount)
     except (TypeError, ValueError):
-        return Response({"error": "Invalid amount"}, status=400)
+        return Response({"error": "Invalid amount"}, status=status.HTTP_400_BAD_REQUEST)
 
     service = CampayService()
+    response = service.initiate_payment(
+        amount=amount,
+        phone=phone,
+        description="Barbing appointment"
+    )
 
-    try:
-        response = service.initiatePayment(
-            amount=amount,
-            phone=phone,
-            description='Barbing appointment'
-        )
-    except Exception as e:
-        print("RAW CAMPAY RESPONSE:", response, type(response))
+    # If SDK returns error dict:
+    if response.get("status") == "error":
         return Response(
-            {"error": "Payment service error", "details": str(e)},
-            status=500
+            {"error": "CamPay error", "details": response},
+            status=status.HTTP_400_BAD_REQUEST
         )
 
-    if not isinstance(response, dict):
-        print("RAW CAMPAY RESPONSE:", response, type(response))
-        return Response(
-            {"error": "Invalid response from payment service", "details": str(response)},
-            status=400
-        )
-    if "reference" not in response:
-        print("RAW CAMPAY RESPONSE:", response, type(response))
-        return Response(
-            {"error": "Payment initiation failed", "details": response}, status=400
-        )
+    # If no reference (unexpected):
     reference = response.get("reference")
-    status = "PENDING"
-    # status = response.get("status", "PENDING")
+    if not reference:
+        return Response(
+            {"error": "Missing reference in CamPay response", "details": response},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
+    # Save and respond
     payment = Payment.objects.create(
         reference=reference,
         phone=phone,
         amount=amount,
-        status=status
+        status=response.get("status", "PENDING")
     )
 
     return Response({
         "message": "Payment initiated",
-        "reference": reference
+        "reference": reference,
+        "campay_response": response
     })
 
     # except Exception as e:
