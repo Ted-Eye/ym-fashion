@@ -3,7 +3,9 @@ from rest_framework.response import Response
 from .services import CampayService
 from .models import Payment
 from rest_framework.permissions import AllowAny
+import logging
 
+logger = logging.getLogger(__name__)
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -15,8 +17,8 @@ def initiate_payment(request):
         amount=amount, phone=phone, description='Barbing appointment'
     )
     # FOR DEBUG PURPOSES
-    print("response from CAMPAY: ", response)
-
+    logger.error(f"Campay response: {response}")
+    # logger.error(f"Error: {str(e)}")
     reference = response.get("reference") if isinstance(response, dict) else None
 
     if not response:
