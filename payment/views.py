@@ -83,16 +83,16 @@ def check_payment_status(request, reference):
     service = CampayService()
     try:
         response = service.getStatus(reference)
-        status = response.get("satus")
-    
-        paymet = Payment.objects.get(reference==reference)
+        status = response.get("status")  # fixed typo
+
+        payment = Payment.objects.get(reference=reference)  # fixed ORM query
+
         if status == "SUCCESSFUL":
-            paymet.status == "SUCCESS"
+            payment.status = "SUCCESS"   # fixed assignment
         elif status == "FAILED":
-            paymet.status == "FAILED"
+            payment.status = "FAILED"
 
-        paymet.save()
-        return Response({"status": paymet.status})
+        payment.save()
+        return Response({"status": payment.status})
     except Exception as e:
-
-        return {"status": "error", "message": str(e)}
+        return Response({"status": "error", "message": str(e)})
