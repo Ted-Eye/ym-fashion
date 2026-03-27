@@ -19,7 +19,7 @@ class CampayService:
         On exception, we wrap the exception into a dict.
         """
         try:
-            result = self.client.collect({
+            result = self.client.initCollect({
                 "amount": str(amount),
                 "currency": "XAF",
                 "from": phone,
@@ -27,6 +27,7 @@ class CampayService:
                 "external_reference": ""  # optional if needed
             })
 
+            
             # Ensure result is a dict
             if isinstance(result, dict):
                 return result
@@ -37,6 +38,8 @@ class CampayService:
 
     def get_status(self, reference):
         try:
-            return self.client.get_transaction_status(reference)
+            return self.client.get_transaction_status({
+                "reference": reference
+                })
         except Exception as e:
             return {"status": "error", "message": str(e)}

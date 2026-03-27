@@ -78,18 +78,21 @@ def initiate_payment(request):
     # })
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def check_payment_status(request, reference):
     service = CampayService()
-    response = service.getStatus(reference)
-    status = response.get("satus")
-    paymet = Payment.objects.get(reference==reference)
-    if status == "SUCCESSFUL":
-        paymet.status == "SUCCESS"
-    elif status == "FAILED":
-        paymet.status == "FAILED"
+    try:
+        response = service.getStatus(reference)
+        status = response.get("satus")
+    
+        paymet = Payment.objects.get(reference==reference)
+        if status == "SUCCESSFUL":
+            paymet.status == "SUCCESS"
+        elif status == "FAILED":
+            paymet.status == "FAILED"
 
-    paymet.save()
+        paymet.save()
+        return Response({"status": paymet.status})
+    except Exception as e:
 
-    return Response({
-        "status": paymet.status
-    })
+        return {"status": "error", "message": str(e)}
