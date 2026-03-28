@@ -61,9 +61,9 @@ def initiate_payment(request):
     
 
     try:
-        hairstyle=Hairstyle.objects.get(public_id=selection),
+        hairstyle=Hairstyle.objects.get(public_id=selection)
     except Exception as e:
-        return Response({"error": f"No hairstyle with public_id: {selection}"}, str(e))
+        return Response({"error": f"No hairstyle with public_id: {selection}"}, status=400)
     booking = Booking.objects.create(
         bearer=bearer,
         hairstyle = hairstyle,    
