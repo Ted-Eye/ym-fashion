@@ -7,9 +7,10 @@ from payment.models import Payment
 # Create your models here.
 
 class Booking(models.Model):
+    ticket_number = models.CharField(unique=True, max_length=8)
     style = models.ForeignKey(Hairstyle, on_delete=models.CASCADE)
-    client = models.ForeignKey(Payment, on_delete=models.DO_NOTHING)
-    schedule_date = models.DateTimeField(blank=False)
+    client = models.CharField(max_length=50)
+    scheduled_date = models.DateTimeField(blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -2,15 +2,24 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .services import CampayService
 from .models import Payment
+from clients.models import Booking
 from rest_framework.permissions import AllowAny
 from rest_framework import status
+import secrets
+import string
+
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def initiate_payment(request):
+    #PAYMENT INFO
     phone = request.data.get("phone")
     amount = request.data.get("amount")
 
+    #BOOKING INFO
+    name = request.data.get("name")
+    style = request.data.get("style")
+    scheduled_date = request.data.get("date")
     if not phone or not amount:
         return Response({"error": "phone and amount are required"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -49,10 +58,24 @@ def initiate_payment(request):
         status=response.get("status", "PENDING")
     )
 
+    #GENERATE TICKET NUMBER 
+    def get_ticket_number():
+        alphabet = string.digits + string.ascii_uppercase
+        random_part = ''.join(secrets.choice(alphabet) for _ in range(5))
+        return f"YM-{random_part}"
+    
+    booking = Booking.objects.create(
+        client=payment.name,
+        style=style,
+        scheduled_date=scheduled_date,
+        ticket_number=get_ticket_number()
+    )
     return Response({
         "message": "Payment initiated",
         "reference": reference,
-        "campay_response": response
+        "campay_response": response,
+        "ticket": str(booking)
+
     })
 
     # except Exception as e:
