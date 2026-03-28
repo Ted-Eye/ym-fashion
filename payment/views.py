@@ -89,14 +89,14 @@ def check_payment_status(request, reference):
 
         if status == "PENDING":
             payment.status = "PENDING"
+            return Response({"status": payment.status})
         elif status == "SUCCESSFUL":
             payment.status = "SUCCESS"
+            payment.save()
+            return Response({"status": payment.status})
         elif status == "FAILED":
             payment.status = "FAILED"
-
-        payment.save()
-        return Response({"status": payment.status})
-        
-        
+            return Response({"status": payment.status})
+            
     except Exception as e:
         return Response({"status": "error", "message": str(e)})
