@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from .services import CampayService
 from .models import Payment
 from clients.models import Booking
+from clients.serializers import BookingSerializer
 from catalog.models import Hairstyle
 from rest_framework.permissions import AllowAny
 from rest_framework import status
@@ -73,12 +74,12 @@ def initiate_payment(request):
         booking=booking,
         status=response.get("status", "PENDING")
     )
-
+    serialized = BookingSerializer(booking)
     return Response({
         "message": "Payment initiated",
         "reference": reference,
         "campay_response": response,
-        "appointment": str(booking)
+        "appointment": serialized.data
 
     })
 

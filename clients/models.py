@@ -12,12 +12,11 @@ class Booking(models.Model):
     hairstyle = models.ForeignKey(Hairstyle, on_delete=models.CASCADE)
     bearer = models.CharField(max_length=50)
     scheduled_date = models.DateTimeField(blank=True, null=False, default=datetime.date.today)
-    # payment = models.OneToOneField(to=Payment, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.client.status
+        return self.ticket_number
     
 
 class Coupon(models.Model):
