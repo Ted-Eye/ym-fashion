@@ -20,7 +20,7 @@ def initiate_payment(request):
     #BOOKING INFO
     bearer = request.data.get("name")
     hairstyle = request.data.get("hairstyle")
-    scheduled_date = request.data.get("date")
+    # scheduled_date = request.data.get("date")
     if not phone or not amount:
         return Response({"error": "phone and amount are required"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -61,7 +61,7 @@ def initiate_payment(request):
     booking = Booking.objects.create(
         bearer=bearer,
         hairstyle=Hairstyle.objects.get(public_id=hairstyle),
-        scheduled_date=scheduled_date,
+        # scheduled_date=scheduled_date,
         ticket_number=get_ticket_number()
     )
 
