@@ -17,7 +17,7 @@ def initiate_payment(request):
     amount = request.data.get("amount")
 
     #BOOKING INFO
-    name = request.data.get("name")
+    bearer = request.data.get("name")
     style = request.data.get("style")
     scheduled_date = request.data.get("date")
     if not phone or not amount:
@@ -50,31 +50,34 @@ def initiate_payment(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Save and respond
-    payment = Payment.objects.create(
-        reference=reference,
-        phone=phone,
-        amount=amount,
-        status=response.get("status", "PENDING")
-    )
 
-    #GENERATE TICKET NUMBER 
+    #GENERATE TICKET NUMBER AND SAVE APPOINTMENT
     def get_ticket_number():
         alphabet = string.digits + string.ascii_uppercase
         random_part = ''.join(secrets.choice(alphabet) for _ in range(5))
         return f"YM-{random_part}"
     
     booking = Booking.objects.create(
-        client=payment.name,
+        bearer=bearer,
         style=style,
         scheduled_date=scheduled_date,
         ticket_number=get_ticket_number()
     )
+
+    # Save and respond
+    payment = Payment.objects.create(
+        reference=reference,
+        phone=phone,
+        amount=amount,
+        booking=Booking.objects.get(style=style),
+        status=response.get("status", "PENDING")
+    )
+
     return Response({
         "message": "Payment initiated",
         "reference": reference,
         "campay_response": response,
-        "ticket": str(booking)
+        "appointment": str(booking)
 
     })
 

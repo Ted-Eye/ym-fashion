@@ -2,15 +2,17 @@ from django.db import models
 from django.utils import timezone
 from datetime import timedelta
 from catalog.models import Hairstyle
-from payment.models import Payment
+import datetime
+# from payment.models import Payment
 
 # Create your models here.
 
 class Booking(models.Model):
-    ticket_number = models.CharField(unique=True, max_length=8)
+    ticket_number = models.CharField(unique=True, max_length=8, default="YM-23475")
     style = models.ForeignKey(Hairstyle, on_delete=models.CASCADE)
-    client = models.CharField(max_length=50)
-    scheduled_date = models.DateTimeField(blank=False)
+    bearer = models.CharField(max_length=50)
+    scheduled_date = models.DateTimeField(blank=True, null=False, default=datetime.date.today)
+    # payment = models.OneToOneField(to=Payment, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
