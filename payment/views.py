@@ -83,22 +83,19 @@ def check_payment_status(request, reference):
     service = CampayService()
     try:
         response = service.getStatus(reference)
-        status = response.get("status", "code")  # fixed typo
+        status = response.get("status")  # fixed typo
 
         payment = Payment.objects.get(reference=reference)  # fixed ORM query
 
         if status == "PENDING":
-            payment.status = "PENDING"   # fixed assignment
-            return Response({"status": payment.status, "code": status.code})
-        
+            payment.status = "PENDING"
         elif status == "SUCCESSFUL":
-            payment.status == "SUCCESS"
-            payment.save()
-            return Response({"status": payment.status})
-        
+            payment.status = "SUCCESS"
         elif status == "FAILED":
             payment.status = "FAILED"
-            return Response({"status": payment.status})
+
+        payment.save()
+        return Response({"status": payment.status})
         
         
     except Exception as e:
