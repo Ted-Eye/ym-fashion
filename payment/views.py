@@ -82,7 +82,7 @@ def initiate_payment(request):
 def check_payment_status(request, reference):
     service = CampayService()
     try:
-        response = service.getStatus(reference)
+        response = service.get_status(reference)
         status = response.get("status")  # fixed typo
 
         payment = Payment.objects.get(reference=reference)  # fixed ORM query
