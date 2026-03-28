@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from .services import CampayService
 from .models import Payment
 from clients.models import Booking
+from catalog.models import Hairstyle
 from rest_framework.permissions import AllowAny
 from rest_framework import status
 import secrets
@@ -18,7 +19,7 @@ def initiate_payment(request):
 
     #BOOKING INFO
     bearer = request.data.get("name")
-    style = request.data.get("style")
+    hairstyle = request.data.get("hairstyle")
     scheduled_date = request.data.get("date")
     if not phone or not amount:
         return Response({"error": "phone and amount are required"}, status=status.HTTP_400_BAD_REQUEST)
@@ -59,7 +60,7 @@ def initiate_payment(request):
     
     booking = Booking.objects.create(
         bearer=bearer,
-        style=style,
+        hairstyle=Hairstyle.objects.get(public_id=hairstyle),
         scheduled_date=scheduled_date,
         ticket_number=get_ticket_number()
     )
@@ -69,7 +70,7 @@ def initiate_payment(request):
         reference=reference,
         phone=phone,
         amount=amount,
-        booking=Booking.objects.get(style=style),
+        booking=booking,
         status=response.get("status", "PENDING")
     )
 

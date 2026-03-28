@@ -9,7 +9,7 @@ import datetime
 
 class Booking(models.Model):
     ticket_number = models.CharField(unique=True, max_length=8, default="YM-23475")
-    style = models.ForeignKey(Hairstyle, on_delete=models.CASCADE)
+    hairstyle = models.ForeignKey(Hairstyle, on_delete=models.CASCADE)
     bearer = models.CharField(max_length=50)
     scheduled_date = models.DateTimeField(blank=True, null=False, default=datetime.date.today)
     # payment = models.OneToOneField(to=Payment, on_delete=models.CASCADE, null=True, blank=True)
