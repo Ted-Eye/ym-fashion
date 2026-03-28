@@ -20,7 +20,7 @@ def initiate_payment(request):
 
     #BOOKING INFO
     bearer = request.data.get("name")
-    hairstyle = request.data.get("hairstyle")
+    selection = request.data.get("selection")
     # scheduled_date = request.data.get("date")
     if not phone or not amount:
         return Response({"error": "phone and amount are required"}, status=status.HTTP_400_BAD_REQUEST)
@@ -59,9 +59,14 @@ def initiate_payment(request):
         random_part = ''.join(secrets.choice(alphabet) for _ in range(5))
         return f"YM-{random_part}"
     
+
+    try:
+        hairstyle=Hairstyle.objects.get(public_id=selection),
+    except Exception as e:
+        return Response({"error": f"No hairstyle with public_id: {selection}"}, str(e))
     booking = Booking.objects.create(
         bearer=bearer,
-        hairstyle=Hairstyle.objects.get(public_id=hairstyle),
+        hairstyle = hairstyle,    
         # scheduled_date=scheduled_date,
         ticket_number=get_ticket_number()
     )
