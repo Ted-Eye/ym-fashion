@@ -11,7 +11,7 @@ class Payment(models.Model):
         ("FAILED", "failed")
     ]
     reference = models.CharField(max_length=100, unique=True)
-    booking = models.OneToOneField(to=Booking, on_delete=models.CASCADE, related_name="payment_detail", null=True)
+    booking = models.OneToOneField(Booking, on_delete=models.CASCADE, related_name="payment", null=True)
     name = models.CharField(max_length=50, null=True, blank=False)
     phone = models.CharField(max_length=20)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
