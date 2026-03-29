@@ -131,7 +131,7 @@ def check_payment_status(request, reference):
             payment.status = "FAILED"
             # payment.booking.delete() # Optionally delete the booking if payment failed
             payment.save()  
-            return Response({"status": payment.status})
+            return Response({"status": payment.status, "full_response": response})
             
     except Exception as e:
         return Response({"status": "error", "message": str(e)})
