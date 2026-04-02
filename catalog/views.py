@@ -13,7 +13,7 @@ class HairstyleViewset(viewsets.ModelViewSet):
     serializer_class = HairstyleSerializer
     
     def get_permissions(self):
-        if self.action in ['list', 'retreive']:
+        if self.action in ['list', 'retreive', 'create', 'destroy']:
             return [AllowAny()]
         return [IsAdminUser()]
     
